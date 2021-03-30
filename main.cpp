@@ -47,7 +47,7 @@ int main() {
         ThisThread::sleep_for(100ms);
     }
     uLCD.locate(0, 2);
-    uLCD.textbackground_color(BLACK);
+    uLCD.textbackground_color(WHITE);
     uLCD.printf("%3dHz", num + 1);
     float input_serial[500] = {0};
     fq = (num + 1);
@@ -66,16 +66,17 @@ int main() {
 void generate_triangle(void) {
     // S = 5
     uint16_t output = 0;
+    int faq = (1000 / fq) / 20;
     while (1) {
         for (int i = 0; i < 10; i++) {
             output = (uint16_t)(65535 * 3 / 3.3 * i / 10);
             aout.write_u16(output);
-            ThisThread::sleep_for(1000ms / fq / 20);
+            ThisThread::sleep_for(faq);
         }
         for (int i = 0; i < 10; i++) {
             output = (uint16_t)(65535 * 3 / 3.3 - 65535 * 3 / 3.3 * i / 10);
             aout.write_u16(output);
-            ThisThread::sleep_for(1000ms / fq / 20);
+            ThisThread::sleep_for(faq);
         }
     }
 }
