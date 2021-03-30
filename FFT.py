@@ -3,10 +3,10 @@ import numpy as np
 import serial
 import time
 
-Fs = 128.0
+Fs = 1000.0
 Ts = 1.0/Fs
-t = np.arange(0,1,Ts)
-y = np.arange(0,1,Ts)
+t = np.arange(0,0.2,Ts)
+y = np.arange(0,0.2,Ts)
 
 n = len(y)
 k = np.arange(n)
@@ -16,9 +16,8 @@ frq = frq[range(int(n/2))] # one side frequency range
 
 serdev = '/dev/ttyACM0'
 s = serial.Serial(serdev)
-for x in range(0, int(Fs)):
-    line=s.readline()
-    # print line
+for x in range(0, 200):
+    line = s.readline()
     y[x] = float(line)
 
 Y = np.fft.fft(y)/n*2 # fft computing and normalization

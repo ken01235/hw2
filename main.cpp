@@ -7,33 +7,38 @@ DigitalIn bottom1(D6);
 DigitalIn bottom2(D7);
 DigitalIn bottom3(D8);
 AnalogOut aout(PA_5);
+AnalogIn ain(A0);
 
 uLCD_4DGL uLCD(D1, D0, D2);
 
-void print_the_space(void);
-void print_the_options(int);
+Thread thread;
+int fq = 0;
+void generate_triangle(void);
 
 int main() {
     int bt1 = 0;
     int bt2 = 0;
-    int num = 0;
-    int fq = 0;
+    int num = 71;
 
-    print_the_space();
-    print_the_options(0);
+    uLCD.background_color(BLACK);
+    uLCD.textbackground_color(BLACK);
+    uLCD.text_width(3);
+    uLCD.text_height(3);
+    uLCD.locate(0, 2);
+    uLCD.printf("%3dHz", num + 1);
     while(1){
         if (!bt1 && bottom1) {
-            num = (num + 9) % 10;
-            print_the_space();
-            print_the_options(num);
+            num = (num + 126) % 144;
+            uLCD.locate(0, 2);
+            uLCD.printf("%3dHz", num + 1);
             bt1 = bottom1;
         } else if (bt1 && !bottom1) {
             bt1 = bottom1;
         }
         if (!bt2 && bottom2) {
-            num = (num + 1) % 10;
-            print_the_space();
-            print_the_options(num);
+            num = (num + 18) % 144;
+            uLCD.locate(0, 2);
+            uLCD.printf("%3dHz", num + 1);
             bt2 = bottom2;
         } else if (bt2 && !bottom2) {
             bt2 = bottom2;
@@ -41,34 +46,37 @@ int main() {
         if (bottom3) break;
         ThisThread::sleep_for(100ms);
     }
-    uLCD.cls();
-    fq = (num + 1) * 100;
-    // S = 5
-    uint16_t output = 0;
-    while (1) {
-        for (int i = 0; i < 300; i++) {
-            output = (uint16_t)(65535 * 3 / 3.3 * i / 300);
-            aout.write_u16(output);
-            printf("%d ", output);
-        }
-        for (int i = 0; i < 300; i++) {
-            output = (uint16_t)(65535 * 3 / 3.3 - 65535 * 3 / 3.3 * i / 300);
-            aout.write_u16(output);
-            printf("%d ", output);
-        }
+    uLCD.locate(0, 2);
+    uLCD.textbackground_color(BLACK);
+    uLCD.printf("%3dHz", num + 1);
+    float input_serial[500] = {0};
+    fq = (num + 1);
+    thread.start(generate_triangle);
+    ThisThread::sleep_for(500ms);
+    for (int i = 0; i < 500; i++) {
+        input_serial[i] = ain;
+        ThisThread::sleep_for(1ms);
+    }
+    for (int i = 0; i < 500; i++) {
+        printf("%f\n", input_serial[i]);
+        ThisThread::sleep_for(100ms);
     }
 }
 
-void print_the_space(void) {
-    uLCD.cls();
-    uLCD.background_color(BLACK);
-    uLCD.textbackground_color(BLACK);
-    uLCD.text_width(3);
-    uLCD.text_height(3);
-    uLCD.printf("\n\n");
-}
-
-void print_the_options(int num) {
-    uLCD.printf("%2d00Hz", num + 1);
+void generate_triangle(void) {
+    // S = 5
+    uint16_t output = 0;
+    while (1) {
+        for (int i = 0; i < 10; i++) {
+            output = (uint16_t)(65535 * 3 / 3.3 * i / 10);
+            aout.write_u16(output);
+            ThisThread::sleep_for(1000ms / fq / 20);
+        }
+        for (int i = 0; i < 10; i++) {
+            output = (uint16_t)(65535 * 3 / 3.3 - 65535 * 3 / 3.3 * i / 10);
+            aout.write_u16(output);
+            ThisThread::sleep_for(1000ms / fq / 20);
+        }
+    }
 }
 
