@@ -1,29 +1,62 @@
+// EE240500 Embedded System Homework2
+// 108061207 陳伯丞
 #include "mbed.h"
 #include "uLCD_4DGL.h"
 
-DigitalIn bottom1(D6); 
-DigitalIn bottom2(D7); 
-DigitalIn bottom3(D8); 
+DigitalIn bottom1(D6);
+DigitalIn bottom2(D7);
+DigitalIn bottom3(D8);
+AnalogOut aout(PA_5);
 
-uLCD_4DGL uLCD(D1, D0, D2); // serial tx, serial rx, reset pin;
+uLCD_4DGL uLCD(D1, D0, D2);
+
+void print_the_space(void);
+void print_the_options(int);
 
 int main() {
-    uLCD.cls();
-    printf("\n\n\n\n  ");
-    uLCD.text_width(3);
-    uLCD.text_height(3);
-    uLCD.text_underline(true);
-    uLCD.printf("A");
-    uLCD.text_underline(false);
-    uLCD.printf(" B C\n");
-    int a;
+    int bt1 = 0;
+    int bt2 = 0;
+    int num = 0;
+    int fq = 0;
+
+    print_the_space();
+    print_the_options(0);
     while(1){
-        a = bottom1;
-        printf("%d ", a);
-        a = bottom2;
-        printf("%d ", a);
-        a = bottom3;
-        printf("%d\n", a);
+        if (!bt1 && bottom1) {
+            num = (num + 9) % 10;
+            print_the_space();
+            print_the_options(num);
+            bt1 = bottom1;
+        } else if (bt1 && !bottom1) {
+            bt1 = bottom1;
+        }
+        if (!bt2 && bottom2) {
+            num = (num + 1) % 10;
+            print_the_space();
+            print_the_options(num);
+            bt2 = bottom2;
+        } else if (bt2 && !bottom2) {
+            bt2 = bottom2;
+        }
+        if (bottom3) break;
         ThisThread::sleep_for(100ms);
     }
+    uLCD.cls();
+    fq = (num + 1) * 100;
+    // S = 5
+
 }
+
+void print_the_space(void) {
+    uLCD.cls();
+    uLCD.background_color(BLACK);
+    uLCD.textbackground_color(BLACK);
+    uLCD.text_width(3);
+    uLCD.text_height(3);
+    uLCD.printf("\n\n");
+}
+
+void print_the_options(int num) {
+    uLCD.printf("%2d00Hz", num + 1);
+}
+
