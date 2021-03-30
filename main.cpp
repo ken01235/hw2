@@ -44,7 +44,19 @@ int main() {
     uLCD.cls();
     fq = (num + 1) * 100;
     // S = 5
-
+    uint16_t output = 0;
+    while (1) {
+        for (int i = 0; i < 300; i++) {
+            output = (uint16_t)(65535 * 3 / 3.3 * i / 300);
+            aout.write_u16(output);
+            printf("%d ", output);
+        }
+        for (int i = 0; i < 300; i++) {
+            output = (uint16_t)(65535 * 3 / 3.3 - 65535 * 3 / 3.3 * i / 300);
+            aout.write_u16(output);
+            printf("%d ", output);
+        }
+    }
 }
 
 void print_the_space(void) {
