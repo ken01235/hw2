@@ -71,7 +71,7 @@ void generate_triangle(void) {
         for (int i = 0; i < 10; i++) {
             output = (uint16_t)(65535 * 3 / 3.3 * i / 10);
             aout.write_u16(output);
-            ThisThread::sleep_for(faq);
+            ThisThread::sleep_for(1000*faq);
         }
         for (int i = 0; i < 10; i++) {
             output = (uint16_t)(65535 * 3 / 3.3 - 65535 * 3 / 3.3 * i / 10);
