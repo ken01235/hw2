@@ -55,7 +55,7 @@ int main() {
     ThisThread::sleep_for(500ms);
     for (int i = 0; i < 500; i++) {
         input_serial[i] = ain;
-        ThisThread::sleep_for(1ms);
+        wait_us(500);
     }
     for (int i = 0; i < 500; i++) {
         printf("%f\n", input_serial[i]);
@@ -66,17 +66,15 @@ int main() {
 void generate_triangle(void) {
     // S = 5
     uint16_t output = 0;
-    int faq = (1000 / fq) / 20;
+    int T = 52000 / fq / 20;
     while (1) {
-        for (int i = 0; i < 10; i++) {
-            output = (uint16_t)(65535 * 3 / 3.3 * i / 10);
+        for (int i = 0; i < T; i++) {
+            output = (uint16_t)(65535 * 3 / 3.3 * i / T);
             aout.write_u16(output);
-            ThisThread::sleep_for(1000*faq);
         }
-        for (int i = 0; i < 10; i++) {
-            output = (uint16_t)(65535 * 3 / 3.3 - 65535 * 3 / 3.3 * i / 10);
+        for (int i = 0; i < T; i++) {
+            output = (uint16_t)(65535 * 3 / 3.3 - 65535 * 3 / 3.3 * i / T);
             aout.write_u16(output);
-            ThisThread::sleep_for(faq);
         }
     }
 }

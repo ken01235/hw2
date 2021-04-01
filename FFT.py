@@ -3,10 +3,10 @@ import numpy as np
 import serial
 import time
 
-Fs = 1000.0
+Fs = 2000.0
 Ts = 1.0/Fs
-t = np.arange(0,0.2,Ts)
-y = np.arange(0,0.2,Ts)
+t = np.arange(0,0.25,Ts)
+y = np.arange(0,0.25,Ts)
 
 n = len(y)
 k = np.arange(n)
@@ -16,7 +16,7 @@ frq = frq[range(int(n/2))] # one side frequency range
 
 serdev = '/dev/ttyACM0'
 s = serial.Serial(serdev)
-for x in range(0, 200):
+for x in range(0, 500):
     line = s.readline()
     y[x] = float(line)
 
