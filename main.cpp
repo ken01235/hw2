@@ -66,7 +66,7 @@ int main() {
 void generate_triangle(void) {
     // S = 5
     uint16_t output = 0;
-    int T = 52000 / fq / 20;
+    int T = 52001 / fq / 20;
     while (1) {
         for (int i = 0; i < T; i++) {
             output = (uint16_t)(65535 * 3 / 3.3 * i / T);
