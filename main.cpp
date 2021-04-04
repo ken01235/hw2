@@ -1,7 +1,7 @@
 // EE240500 Embedded System Homework2
 // 108061207 陳伯丞
-#include "mbed.h"
-#include "uLCD_4DGL.h"
+#include "../mbed-os-build/mbed.h"
+#include "./4dgl-ulcd-se/uLCD_4DGL.h"
 
 DigitalIn bottom1(D6);
 DigitalIn bottom2(D7);
