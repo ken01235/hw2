@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import serial
 import time
+import os
 
 Fs = 2000.0
 Ts = 1.0/Fs
@@ -25,6 +26,7 @@ Y = Y[range(int(n/2))] # remove the conjugate frequency parts
 
 fig, ax = plt.subplots(2, 1)
 ax[0].plot(t,y)
+ax[0].
 ax[0].set_xlabel('Time')
 ax[0].set_ylabel('Amplitude')
 ax[1].plot(frq,abs(Y),'r') # plotting the spectrum
